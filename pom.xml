@@ -11,6 +11,7 @@
     <properties>
         <kotlin.version>1.0.1-2</kotlin.version>
         <junit.version>4.10</junit.version>
+        <java.verision>1.6</java.verision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -37,6 +38,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
@@ -58,6 +61,59 @@
                         <goals>
                             <goal>test-compile</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>attached</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>package</phase>-->
+                        <!--<configuration>-->
+                            <!--<descriptorRefs>-->
+                                <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                            <!--</descriptorRefs>-->
+                            <!--&lt;!&ndash;<archive>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<manifest>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<mainClass>com.lendup.grinder.TypeGuesser</mainClass>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</manifest>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</archive>&ndash;&gt;-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <!-- Run shade goal on package phase -->
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <!-- add Main-Class to manifest file -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <mainClass>com.lendup.grinder.TypeGuesser</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
